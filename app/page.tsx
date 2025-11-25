@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, ArrowRight, ExternalLink, Menu, X } from 'lucide-react';
-import Reveal from "../app/components/Reveal";
+import { ChevronLeft, ChevronRight, ArrowRight, ExternalLink, Menu, X, Sparkles } from 'lucide-react';
+import AnimatedSection from "../app/components/AnimatedSection";
 
 // Data Store
 const DATA = {
@@ -128,36 +128,57 @@ const Navbar = () => {
   const navLinks = ['Products', 'Vision', 'Impact', 'Culture', 'Life', 'Tech', 'Careers'];
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-md' : 'bg-white/95'}`}>
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-md shadow-lg' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="text-2xl font-bold text-blue-600">Flobiz</div>
+        <div className="flex justify-between items-center h-20">
+          <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Flobiz</div>
 
           <div className="hidden md:flex space-x-8">
             {navLinks.map(link => (
-              <a key={link} href={`#${link.toLowerCase()}`} className="text-gray-700 hover:text-blue-600 transition-colors">
+              <a key={link} href={`#${link.toLowerCase()}`} className="text-slate-600 hover:text-blue-600 font-medium transition-colors relative group">
                 {link}
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
               </a>
             ))}
           </div>
 
-          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden">
-            {isOpen ? <X /> : <Menu />}
+          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden text-slate-700 hover:text-blue-600 transition-colors">
+            {isOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
       </div>
 
-      {isOpen && (
-        <div className="md:hidden bg-white border-t">
-          <div className="px-4 py-4 space-y-3">
+      {/* Mobile Menu Overlay */}
+      <div className={`fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={() => setIsOpen(false)} />
+
+      {/* Mobile Menu Sidebar */}
+      <div className={`fixed top-0 right-0 h-full w-[280px] bg-white shadow-2xl z-50 md:hidden transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className="p-6 flex flex-col h-full">
+          <div className="flex justify-between items-center mb-8">
+            <span className="text-xl font-bold text-blue-600">Menu</span>
+            <button onClick={() => setIsOpen(false)} className="text-slate-500 hover:text-slate-800">
+              <X size={24} />
+            </button>
+          </div>
+          <div className="space-y-4 flex-1">
             {navLinks.map(link => (
-              <a key={link} href={`#${link.toLowerCase()}`} className="block text-gray-700 hover:text-blue-600">
+              <a
+                key={link}
+                href={`#${link.toLowerCase()}`}
+                className="block text-lg font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 px-4 py-3 rounded-xl transition-all"
+                onClick={() => setIsOpen(false)}
+              >
                 {link}
               </a>
             ))}
           </div>
+          <div className="pt-6 border-t border-slate-100">
+            <button className="w-full py-3 bg-blue-600 text-white rounded-xl font-semibold shadow-lg shadow-blue-500/30">
+              Get Started
+            </button>
+          </div>
         </div>
-      )}
+      </div>
     </nav>
   );
 };
@@ -223,47 +244,94 @@ const Navbar = () => {
 //   </section>
 // );
 
+// const Hero = () => (
+//   <section className="px-4 pt-24 bg-gradient-to-br from-blue-50 to-white">
+//     <div className="max-w-6xl mx-auto px-2 sm:px-4">
+
+//       <div className="min-h-[80vh] flex items-center justify-center text-center">
+
+//         <div>
+
+//           <h1
+//             className="text-3xl sm:text-5xl md:text-7xl font-bold leading-tight mb-6
+//              text-transparent bg-clip-text
+//              bg-gradient-to-r from-[#6A5CFF] to-[#0D1B82] text-center"
+//           >
+//             Where real <wbr />
+//             innovation <wbr />
+//             drives real <wbr />
+//             impact
+//           </h1>
+
+
+//           <p className="text-base sm:text-lg md:text-2xl text-gray-600 max-w-2xl mx-auto mb-10 px-2">
+//             We're not just building products, we're helping India's small
+//             businesses grow stronger with AI-powered software.
+//           </p>
+
+//           <button
+//             className="w-full sm:w-auto px-6 py-4 rounded-xl text-white 
+//                        text-base sm:text-lg font-medium
+//                        bg-gradient-to-r from-indigo-500 to-purple-600
+//                        shadow-lg hover:shadow-xl transition-all hover:scale-105
+//                        inline-flex items-center justify-center gap-2">
+//             View open positions <ArrowRight size={22} />
+//           </button>
+
+//         </div>
+
+//       </div>
+
+//     </div>
+//   </section>
+// );
+
 const Hero = () => (
-  <section className="px-4 bg-gradient-to-br from-blue-50 to-white">
-    <div className="max-w-7xl mx-auto">
+  <section className="relative px-4 pt-32 pb-20 overflow-hidden bg-slate-50">
+    {/* Futuristic Background Elements */}
+    <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+      <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-blue-400/20 blur-[100px] animate-pulse" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-purple-400/20 blur-[120px]" />
+    </div>
 
-      {/* FULL PAGE HERO SECTION */}
-      <div className="min-h-screen flex items-center justify-center text-center">
-
-        <div className="max-w-6xl mx-auto">
-
-          <h1
-            className="text-4xl md:text-7xl font-bold leading-tight mb-8
-             text-transparent bg-clip-text 
-             bg-gradient-to-r from-[#6A5CFF] to-[#0D1B82]">
-            Where real innovation<br className="hidden md:block" />
-            drives real impact
-          </h1>
-
-
-          <p className="text-lg md:text-2xl text-gray-600 max-w-3xl mx-auto mb-12">
-            We're not just building products, we're helping India's small businesses grow
-            stronger with AI-powered software.
-          </p>
-
-          <button className="px-10 py-4 rounded-xl text-white text-lg font-medium 
-                             bg-gradient-to-r from-indigo-500 to-purple-600 
-                             shadow-lg hover:shadow-xl transition-all hover:scale-105 
-                             inline-flex items-center gap-2">
-            View open positions
-            <ArrowRight size={22} />
-          </button>
-
+    <div className="max-w-6xl mx-auto text-center relative z-10">
+      <AnimatedSection type="scale-up" duration={0.8}>
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100/50 border border-blue-200 text-blue-700 text-sm font-medium mb-8 backdrop-blur-sm">
+          <Sparkles size={16} />
+          <span>Revolutionizing SMB Growth</span>
         </div>
-      </div>
+      </AnimatedSection>
 
-      {/* BELOW SECTION (NOT FULL SCREEN) */}
-      {/* <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 grid md:grid-cols-2 gap-8 items-center "> */}
+      <AnimatedSection type="fade-up" delay={0.2}>
+        <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-tight mb-6 tracking-tight">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
+            Where Innovation
+          </span>
+          <br />
+          <span className="text-slate-800">Drives Impact</span>
+        </h1>
+      </AnimatedSection>
 
+      <AnimatedSection type="fade-up" delay={0.4}>
+        <p className="text-lg sm:text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto mb-10 px-4 leading-relaxed">
+          Empowering India's small businesses with intelligent, <span className="text-blue-600 font-semibold">AI-first software</span> that automates work and accelerates growth.
+        </p>
+      </AnimatedSection>
+
+      <AnimatedSection type="fade-up" delay={0.6}>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <button className="w-full sm:w-auto px-8 py-4 rounded-xl text-white text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 group">
+            View Opportunities
+            <ArrowRight className="group-hover:translate-x-1 transition-transform" size={20} />
+          </button>
+          <button className="w-full sm:w-auto px-8 py-4 rounded-xl text-slate-700 text-lg font-semibold bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all hover:scale-105 active:scale-95">
+            Learn More
+          </button>
+        </div>
+      </AnimatedSection>
     </div>
   </section>
 );
-
 
 // const RY = () => (
 //   <section className="w-full px-4 py-24 bg-gradient-to-br from-blue-50 to-white flex justify-center">
@@ -305,42 +373,51 @@ const Hero = () => (
 // );
 
 const RY = () => (
-  <section className="w-full px-4 py-24 bg-gradient-to-br from-blue-50 to-white flex justify-center">
+  <section className="w-full px-4 py-24 bg-white relative overflow-hidden">
+    <div className="max-w-6xl w-full mx-auto">
+      <AnimatedSection>
+        <div className="bg-gradient-to-br from-slate-50 to-blue-50/50 rounded-3xl p-8 md:p-16 grid md:grid-cols-2 gap-12 items-center border border-slate-100 shadow-sm">
+          <div>
+            <AnimatedSection type="slide-right" delay={0.2}>
+              <div className="text-5xl text-blue-200 mb-6">❝</div>
+              <p className="text-lg md:text-xl text-slate-700 italic mb-8 leading-relaxed relative z-10">
+                FloBiz was born from a simple belief that the true strength of India lies in its small
+                and medium businesses. Our mission is to bring agentic AI into their daily workflows —
+                intelligent software that removes friction, automates work, and frees business owners
+                to focus on growth.
+              </p>
+            </AnimatedSection>
 
-    <Reveal delay={0.1}>
-      <div className="max-w-6xl w-full bg-white rounded-3xl shadow-xl 
-                      p-10 md:p-12 grid md:grid-cols-2 gap-12 items-center">
+            <div className="h-px w-full bg-slate-200 my-8" />
 
-        <div>
-          <Reveal delay={0.2}>
-            <p className="text-lg text-gray-700 italic mb-6 leading-relaxed">
-              "FloBiz was born from a simple belief that the true strength of India lies in its small
-              and medium businesses. Our mission is to bring agentic AI into their daily workflows —
-              intelligent software that removes friction, automates work, and frees business owners
-              to focus on growth. When India's SMBs rise, the nation's GDP grows stronger — and so
-              does our collective future."
-            </p>
-          </Reveal>
-
-          <hr className="my-6" />
-
-          <Reveal delay={0.3}>
-            <p className="font-semibold text-gray-900">Rakesh Yadav</p>
-            <p className="text-gray-600 mb-3">Founder, Flobiz</p>
-          </Reveal>
-
-        </div>
-
-        <Reveal delay={0.4}>
-          <div className="bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl 
-                          h-64 md:h-full min-h-[300px] flex items-center justify-center">
-            <div className="text-6xl">👨‍💼</div>
+            <AnimatedSection type="fade-up" delay={0.4}>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-xl">
+                  👨‍💼
+                </div>
+                <div>
+                  <p className="font-bold text-slate-900 text-lg">Rakesh Yadav</p>
+                  <p className="text-slate-500">Founder, Flobiz</p>
+                </div>
+              </div>
+              <a href="#" className="mt-6 inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors group">
+                Connect on LinkedIn
+                <ExternalLink size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </a>
+            </AnimatedSection>
           </div>
-        </Reveal>
 
-      </div>
-    </Reveal>
-
+          <AnimatedSection type="scale-up" delay={0.3}>
+            <div className="relative">
+              <div className="absolute inset-0 bg-blue-600 blur-[60px] opacity-20 rounded-full" />
+              <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl h-[400px] w-full flex items-center justify-center relative z-10 shadow-2xl shadow-blue-900/20 transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                <div className="text-9xl filter drop-shadow-lg">👨‍💼</div>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </AnimatedSection>
+    </div>
   </section>
 );
 
@@ -408,46 +485,50 @@ const ProductShowcase = () => {
   ];
 
   return (
-    <section id="products" className="py-20 px-4 bg-gradient-to-b from-gray-50 to-blue-50">
+    <section id="products" className="py-24 px-4 bg-slate-50">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-gray-900">Our products</h2>
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
-          {products.map(product => (
-            <div
-              key={product.id}
-              className={`bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-t-4 ${product.borderColor} overflow-hidden group`}
-            >
-              <div className={`p-8 bg-gradient-to-br ${product.bgGradient}`}>
-                <div className="flex items-center gap-3 mb-6">
-                  <span className="text-4xl">{product.icon}</span>
-                  <h3 className="text-2xl font-bold text-gray-900">{product.name}</h3>
-                </div>
+        <AnimatedSection>
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 text-slate-900">Our Ecosystem</h2>
+          <p className="text-center text-slate-500 mb-16 max-w-2xl mx-auto text-lg">
+            A suite of powerful tools designed to modernize every aspect of your business
+          </p>
+        </AnimatedSection>
 
-                <p className="text-gray-700 mb-8 leading-relaxed min-h-[80px]">
-                  {product.description}
-                </p>
+        <div className="grid md:grid-cols-3 gap-8">
+          {products.map((product, idx) => (
+            <AnimatedSection key={product.id} delay={idx * 0.2} type="fade-up" className="h-full">
+              <div
+                className={`h-full bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-slate-100 overflow-hidden group flex flex-col`}
+              >
+                <div className={`p-8 flex-1 flex flex-col`}>
+                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${product.bgGradient} flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform duration-500`}>
+                    {product.icon}
+                  </div>
 
+                  <h3 className="text-2xl font-bold text-slate-900 mb-3">{product.name}</h3>
 
+                  <p className="text-slate-600 mb-8 leading-relaxed flex-1">
+                    {product.description}
+                  </p>
 
-                <button
-                  className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 mb-8 flex items-center justify-center gap-2 ${product.buttonStyle}`}
-                  disabled={product.comingSoon}
-                >
-                  {product.buttonText} {!product.comingSoon && <ArrowRight size={18} />}
-                </button>
-
-                <div className="border-t border-gray-200 pt-6">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4 mb-8">
                     {product.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-gray-600 text-sm font-medium">
+                      <div key={idx} className="flex items-center gap-3 text-slate-600 text-sm font-medium bg-slate-50 p-3 rounded-lg">
                         <span className="text-lg">{feature.icon}</span>
                         <span>{feature.label}</span>
                       </div>
                     ))}
                   </div>
+
+                  <button
+                    className={`w-full py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${product.buttonStyle}`}
+                    disabled={product.comingSoon}
+                  >
+                    {product.buttonText} {!product.comingSoon && <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />}
+                  </button>
                 </div>
               </div>
-            </div>
+            </AnimatedSection>
           ))}
         </div>
       </div>
@@ -457,15 +538,22 @@ const ProductShowcase = () => {
 
 // Impact Stats
 const ImpactStats = () => (
-  <section id="impact" className="py-16 bg-blue-600 text-white">
-    <div className="max-w-7xl mx-auto px-4">
-      <h2 className="text-4xl font-bold text-center mb-12">Delivering real impact</h2>
-      <div className="grid md:grid-cols-3 gap-8">
-        {DATA.stats.map(stat => (
-          <div key={stat.label} className="text-center">
-            <div className="text-5xl font-bold mb-2">{stat.value}</div>
-            <div className="text-xl text-blue-100">{stat.label}</div>
-          </div>
+  <section id="impact" className="py-20 bg-blue-600 text-white relative overflow-hidden">
+    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+    <div className="max-w-7xl mx-auto px-4 relative z-10">
+      <AnimatedSection>
+        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">Delivering real impact</h2>
+      </AnimatedSection>
+      <div className="grid md:grid-cols-3 gap-12 md:gap-8">
+        {DATA.stats.map((stat, idx) => (
+          <AnimatedSection key={stat.label} delay={idx * 0.2} type="scale-up">
+            <div className="text-center p-6 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 hover:bg-white/20 transition-colors">
+              <div className="text-4xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-b from-white to-blue-200">
+                {stat.value}
+              </div>
+              <div className="text-lg md:text-xl text-blue-100 font-medium">{stat.label}</div>
+            </div>
+          </AnimatedSection>
         ))}
       </div>
     </div>
@@ -474,18 +562,28 @@ const ImpactStats = () => (
 
 // Testimonials
 const Testimonials = () => (
-  <section className="py-16 px-4 bg-gray-50">
+  <section className="py-24 px-4 bg-slate-50">
     <div className="max-w-7xl mx-auto">
-      <h2 className="text-4xl font-bold text-gray-600 text-center mb-12">What Our Customers Say</h2>
+      <AnimatedSection>
+        <h2 className="text-4xl md:text-5xl font-bold text-slate-900 text-center mb-16">What Our Customers Say</h2>
+      </AnimatedSection>
       <div className="grid md:grid-cols-3 gap-8">
         {DATA.testimonials.map((testimonial, idx) => (
-          <div key={idx} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
-            <p className="text-gray-700 mb-6 italic">"{testimonial.quote}"</p>
-            <div className="border-t pt-4">
-              <p className="font-semibold text-gray-900">{testimonial.name}</p>
-              <p className="text-sm text-gray-600">{testimonial.role}, {testimonial.location}</p>
+          <AnimatedSection key={idx} delay={idx * 0.2} type="fade-up" className="h-full">
+            <div className="h-full bg-white rounded-3xl shadow-sm p-8 hover:shadow-xl transition-all duration-300 border border-slate-100 flex flex-col">
+              <div className="text-4xl text-blue-200 mb-6">❝</div>
+              <p className="text-slate-600 mb-8 italic text-lg leading-relaxed flex-1">"{testimonial.quote}"</p>
+              <div className="border-t border-slate-100 pt-6 flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-xl">
+                  👤
+                </div>
+                <div>
+                  <p className="font-bold text-slate-900">{testimonial.name}</p>
+                  <p className="text-sm text-slate-500">{testimonial.role}, {testimonial.location}</p>
+                </div>
+              </div>
             </div>
-          </div>
+          </AnimatedSection>
         ))}
       </div>
     </div>
@@ -494,16 +592,20 @@ const Testimonials = () => (
 
 // Culture Values
 const CultureValues = () => (
-  <section id="culture" className="py-16 px-4 bg-gray-50">
+  <section id="culture" className="py-24 px-4 bg-white">
     <div className="max-w-7xl mx-auto">
-      <h2 className="text-4xl font-bold text-gray-600 text-center mb-4">Meet CRAFt</h2>
-      <p className="text-center text-gray-600 mb-12 text-lg">Our Cultural Values</p>
+      <AnimatedSection>
+        <h2 className="text-4xl md:text-5xl font-bold text-slate-900 text-center mb-4">Meet CRAFt</h2>
+        <p className="text-center text-slate-500 mb-16 text-xl">Our Cultural Values</p>
+      </AnimatedSection>
       <div className="grid md:grid-cols-2 gap-8">
         {DATA.values.map((value, idx) => (
-          <div key={idx} className="bg-gradient-to-br from-blue-50 to-white rounded-xl p-8 border border-blue-100">
-            <h3 className="text-2xl font-bold mb-4 text-blue-600">{value.title}</h3>
-            <p className="text-gray-700">{value.description}</p>
-          </div>
+          <AnimatedSection key={idx} delay={idx * 0.1} type={idx % 2 === 0 ? "slide-right" : "slide-left"}>
+            <div className="h-full bg-gradient-to-br from-slate-50 to-white rounded-3xl p-10 border border-slate-100 hover:border-blue-200 transition-colors group">
+              <h3 className="text-2xl font-bold mb-4 text-blue-600 group-hover:translate-x-2 transition-transform">{value.title}</h3>
+              <p className="text-slate-600 text-lg leading-relaxed">{value.description}</p>
+            </div>
+          </AnimatedSection>
         ))}
       </div>
     </div>
@@ -512,20 +614,24 @@ const CultureValues = () => (
 
 // Life at FloBiz
 const LifeAtFloBiz = () => (
-  <section id="life" className="py-16 px-4 bg-gray-50">
+  <section id="life" className="py-24 px-4 bg-slate-50">
     <div className="max-w-7xl mx-auto">
-      <h2 className="text-4xl font-bold text-gray-600 text-center mb-12">Life at FloBiz</h2>
-      <div className="grid md:grid-cols-3 gap-6">
+      <AnimatedSection>
+        <h2 className="text-4xl md:text-5xl font-bold text-slate-900 text-center mb-16">Life at FloBiz</h2>
+      </AnimatedSection>
+      <div className="grid md:grid-cols-3 gap-8">
         {DATA.lifeAtFlobiz.map((item, idx) => (
-          <div key={idx} className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow">
-            <div className="bg-gradient-to-br from-blue-400 to-blue-600 h-48 flex items-center justify-center text-6xl">
-              {['🏖️', '🌍', '📚', '🏏', '💻', '🎉'][idx]}
+          <AnimatedSection key={idx} delay={idx * 0.1} type="scale-up" className="h-full">
+            <div className="h-full bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
+              <div className="bg-gradient-to-br from-blue-500 to-indigo-600 h-56 flex items-center justify-center text-7xl group-hover:scale-110 transition-transform duration-700">
+                {['🏖️', '🌍', '📚', '🏏', '💻', '🎉'][idx]}
+              </div>
+              <div className="p-8">
+                <h3 className="text-xl font-bold mb-3 text-slate-900">{item.title}</h3>
+                <p className="text-slate-600 leading-relaxed">{item.description}</p>
+              </div>
             </div>
-            <div className="p-6">
-              <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-              <p className="text-gray-600">{item.description}</p>
-            </div>
-          </div>
+          </AnimatedSection>
         ))}
       </div>
     </div>
@@ -578,40 +684,51 @@ const GrowthStories = () => {
   );
 };
 
+import {
+  ReactIcon, NodeIcon, PythonIcon, AWSIcon, MongoDBIcon, RedisIcon,
+  DockerIcon, KubernetesIcon, GraphQLIcon, TypeScriptIcon, FlutterIcon, FirebaseIcon
+} from '../app/components/TechIcons';
+
+// ... (previous code)
+
 // Tech Stack
 const TechStack = () => {
   const techStackData = [
-    { name: 'React', color: 'bg-blue-500', icon: '⚛️' },
-    { name: 'Node.js', color: 'bg-green-600', icon: '🟢' },
-    { name: 'Python', color: 'bg-yellow-500', icon: '🐍' },
-    { name: 'AWS', color: 'bg-orange-500', icon: '☁️' },
-    { name: 'MongoDB', color: 'bg-green-500', icon: '🍃' },
-    { name: 'Redis', color: 'bg-red-500', icon: '⚡' },
-    { name: 'Docker', color: 'bg-blue-600', icon: '🐳' },
-    { name: 'Kubernetes', color: 'bg-purple-500', icon: '☸️' },
-    { name: 'GraphQL', color: 'bg-pink-500', icon: '📊' },
-    { name: 'TypeScript', color: 'bg-blue-700', icon: '📘' },
-    { name: 'Flutter', color: 'bg-cyan-500', icon: '🦋' },
-    { name: 'Firebase', color: 'bg-orange-400', icon: '🔥' }
+    { name: 'React', color: 'bg-blue-500', icon: <ReactIcon className="w-8 h-8 text-white" /> },
+    { name: 'Node.js', color: 'bg-green-600', icon: <NodeIcon className="w-8 h-8 text-white" /> },
+    { name: 'Python', color: 'bg-yellow-500', icon: <PythonIcon className="w-8 h-8 text-white" /> },
+    { name: 'AWS', color: 'bg-orange-500', icon: <AWSIcon className="w-8 h-8 text-white" /> },
+    { name: 'MongoDB', color: 'bg-green-500', icon: <MongoDBIcon className="w-8 h-8 text-white" /> },
+    { name: 'Redis', color: 'bg-red-500', icon: <RedisIcon className="w-8 h-8 text-white" /> },
+    { name: 'Docker', color: 'bg-blue-600', icon: <DockerIcon className="w-8 h-8 text-white" /> },
+    { name: 'Kubernetes', color: 'bg-purple-500', icon: <KubernetesIcon className="w-8 h-8 text-white" /> },
+    { name: 'GraphQL', color: 'bg-pink-500', icon: <GraphQLIcon className="w-8 h-8 text-white" /> },
+    { name: 'TypeScript', color: 'bg-blue-700', icon: <TypeScriptIcon className="w-8 h-8 text-white" /> },
+    { name: 'Flutter', color: 'bg-cyan-500', icon: <FlutterIcon className="w-8 h-8 text-white" /> },
+    { name: 'Firebase', color: 'bg-orange-400', icon: <FirebaseIcon className="w-8 h-8 text-white" /> }
   ];
 
   return (
-    <section id="tech" className="py-20 px-4 bg-white-600">
-      <div className="max-w-7xl mx-auto text-center">
-        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">Tech@mBB</h2>
-        <p className="text-gray-300 mb-16 text-lg md:text-xl">Modern stack, scalable architecture, and cutting-edge technologies</p>
+    <section id="tech" className="py-24 px-4 bg-slate-900 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
+      <div className="max-w-7xl mx-auto text-center relative z-10">
+        <AnimatedSection>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">Tech@mBB</h2>
+          <p className="text-slate-400 mb-16 text-lg md:text-xl max-w-2xl mx-auto">Modern stack, scalable architecture, and cutting-edge technologies powering our mission</p>
+        </AnimatedSection>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 md:gap-8">
-          {techStackData.map(tech => (
-            <div
-              key={tech.name}
-              className="group flex flex-col items-center justify-center p-6 rounded-2xl bg-slate-800/50 hover:bg-slate-700/70 border border-slate-700 hover:border-slate-600 transition-all duration-300 hover:scale-105 hover:shadow-2xl"
-            >
-              <div className={`${tech.color} w-16 h-16 rounded-xl flex items-center justify-center text-3xl mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                {tech.icon}
+          {techStackData.map((tech, idx) => (
+            <AnimatedSection key={tech.name} delay={idx * 0.05} type="scale-up">
+              <div
+                className="group flex flex-col items-center justify-center p-6 rounded-2xl bg-slate-800/50 hover:bg-slate-700/70 border border-slate-700 hover:border-blue-500/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20"
+              >
+                <div className={`${tech.color} w-16 h-16 rounded-xl flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                  {tech.icon}
+                </div>
+                <p className="text-white font-semibold text-sm md:text-base">{tech.name}</p>
               </div>
-              <p className="text-white font-semibold text-sm md:text-base">{tech.name}</p>
-            </div>
+            </AnimatedSection>
           ))}
         </div>
       </div>
@@ -621,13 +738,22 @@ const TechStack = () => {
 
 // CTA Section
 const CareersCTA = () => (
-  <section id="careers" className="py-20 px-4 bg-gradient-to-br from-blue-500 to-blue-400 text-white">
-    <div className="max-w-4xl mx-auto text-center">
-      <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to Make an Impact?</h2>
-      <p className="text-xl mb-8 text-blue-100">Your next adventure starts here.</p>
-      <button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-50 transition-colors inline-flex items-center gap-2">
-        View open positions <ArrowRight size={24} />
-      </button>
+  <section id="careers" className="py-32 px-4 bg-gradient-to-br from-blue-600 to-indigo-700 text-white relative overflow-hidden">
+    <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+      <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full bg-white/10 blur-[100px]" />
+      <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-purple-500/20 blur-[120px]" />
+    </div>
+
+    <div className="max-w-4xl mx-auto text-center relative z-10">
+      <AnimatedSection type="scale-up">
+        <h2 className="text-4xl md:text-6xl font-bold mb-8 tracking-tight">Ready to Make an Impact?</h2>
+        <p className="text-xl md:text-2xl mb-12 text-blue-100 max-w-2xl mx-auto">
+          Join us in building the future of Indian SMBs. Your next adventure starts here.
+        </p>
+        <button className="bg-white text-blue-600 px-10 py-5 rounded-xl font-bold text-lg hover:bg-blue-50 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-blue-900/20 inline-flex items-center gap-2 group">
+          View open positions <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
+        </button>
+      </AnimatedSection>
     </div>
   </section>
 );
